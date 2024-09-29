@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { brandOptionsMap, categoryOptionsMap } from "@/config";
 import React from "react";
 
 const ShoppingProductTitle = ({ product }) => {
@@ -23,10 +24,10 @@ const ShoppingProductTitle = ({ product }) => {
           <h2 className="text-xl font-bold mb-2">{product?.title}</h2>
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm text-muted-foreground">
-              {product?.category}
+              {categoryOptionsMap[product?.category]}
             </span>
             <span className="text-sm text-muted-foreground">
-              {product?.brand}
+              {brandOptionsMap[product?.brand]}
             </span>
           </div>
           <div className="flex justify-between items-center mb-2">
@@ -35,12 +36,12 @@ const ShoppingProductTitle = ({ product }) => {
                 product?.salePrice > 0 ? "line-through" : ""
               } text-lg font-semibold text-primary`}
             >
-              {product?.price}
+              ${product?.price}
             </span>
 
             {product?.salePrice > 0 ? (
               <span className="text-lg font-semibold text-primary">
-                {product?.salePrice}
+                ${product?.salePrice}
               </span>
             ) : null}
           </div>
