@@ -8,9 +8,15 @@ const initialState = {
 
 export const fetchAllFilteredProducts = createAsyncThunk(
   "/products/fetchAllProducts",
-  async () => {
+  async ({ filtersParams, sortParams }) => {
+    const query = new URLSearchParams({
+      ...filtersParams,
+      sortBy: sortParams,
+    });
+    console.log(filtersParams);
+
     const result = await axios.get(
-      "http://localhost:5000/api/shop/products/get"
+      `http://localhost:5000/api/shop/products/get?${query}`
     );
     return result?.data;
   }
