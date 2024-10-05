@@ -71,6 +71,10 @@ const ShoppingListing = () => {
     dispatch(fetchProductDetails(getCurrentProductId));
   }
 
+  function handleAddtoCart(getCurrentProductId) {
+    console.log(getCurrentProductId);
+  }
+
   useEffect(() => {
     setSort("price-lowtohigh");
     setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
@@ -94,7 +98,6 @@ const ShoppingListing = () => {
     if (productDetails !== null) setOpenDetailsDialog(true);
   }, [productDetails]);
 
-  console.log(productDetails);
   return (
     <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 p-4 md:p-6">
       <ProductFilter filters={filters} handleFilters={handleFilter} />
@@ -138,6 +141,7 @@ const ShoppingListing = () => {
                   handleGetProductDetails={handleGetProductDetails}
                   product={productItem}
                   key={index}
+                  handleAddtoCart={handleAddtoCart}
                 />
               ))
             : null}

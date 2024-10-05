@@ -151,10 +151,10 @@ const updateCartItemQty = async (req, res) => {
 
     const populateCartItems = cart.items.map((item) => ({
       productId: item.productId ? item.productId._id : null,
-      imgae: item.image ? item.productId.image : null,
-      title: item.title ? item.productId.title : "Product not found",
-      price: item.price ? item.productId.price : null,
-      salePrice: item.salePrice ? item.productId.salePrice : null,
+      imgae: item.productId ? item.productId.image : null,
+      title: item.productId ? item.productId.title : "Product not found",
+      price: item.productId ? item.productId.price : null,
+      salePrice: item.productId ? item.productId.salePrice : null,
       quantity: item.quantity ? item.quantity : null,
     }));
 
@@ -176,6 +176,53 @@ const updateCartItemQty = async (req, res) => {
 
 const deleteCartItem = async (req, res) => {
   try {
+    const { userId, productId } = req.params;
+
+    if (!userId || !productId) {
+      return res.status(400).json({
+        message: false,
+        message: "Invalid data provided",
+      });
+    }
+
+    const cart = await Cart.findOne({ userId }).populate({
+      path: "items.productId",
+      select: "image title price salePrice",
+    });
+
+    if (!cart) {
+      return res.status(404).json({
+        success: false,
+        message: "Cart not found!",
+      });
+    }
+
+    cart.items = cart.items.filter(
+      (item) => item.productId._id.toString() !== productId
+    );
+    await cart.save();
+
+    await Cart.populate({
+      path: "items.productId",
+      select: "image title price sale Price",
+    });
+
+    const populateCartItems = cart.items.map((item) => ({
+      productId: item.productId ? item.productId._id : null,
+      imgae: item.productId ? item.productId.image : null,
+      title: item.productId ? item.productId.title : "Product not found",
+      price: item.productId ? item.productId.price : null,
+      salePrice: item.productId ? item.productId.salePrice : null,
+      quantity: item.quantity ? item.quantity : null,
+    }));
+
+    res.status(200).json({
+      success: true,
+      data: {
+        ...cart._doc,
+        items: populateCartItems,
+      },
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({

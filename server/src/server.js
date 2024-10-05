@@ -5,6 +5,7 @@ import cors from "cors";
 import authRouter from "./routes/auth/auth-routes";
 const adminProductsRouter = require("./routes/admin/products-routes");
 const shopProductRouter = require("./routes/shop/product-routes");
+const shopCarttRouter = require("./routes/shop/cart-routes");
 
 mongoose
   .connect("mongodb+srv://rkddus3177:qwer1234@youtube.gobbp.mongodb.net/")
@@ -34,5 +35,6 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductsRouter);
 app.use("/api/shop/products", shopProductRouter);
+app.use("/api/shop/cart", shopCarttRouter);
 
 app.listen(PORT, () => console.log(`🔥Server app listen on ${PORT}`));
